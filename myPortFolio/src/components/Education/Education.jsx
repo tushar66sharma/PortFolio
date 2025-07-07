@@ -56,7 +56,7 @@ export const Education = () => {
             <div
               className={`
                 relative z-20
-                w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3
+                w-full sm:w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/3
                 mx-auto
                 2xl:ml-32 2xl:mr-32
                 p-4 sm:p-6 md:p-8
