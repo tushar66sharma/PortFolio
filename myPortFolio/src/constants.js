@@ -32,6 +32,10 @@ import vercelLogo from './assets/tech_logo/vercel.png';
 import postgreLogo from './assets/tech_logo/postgre.png';
 import csharpLogo from './assets/tech_logo/csharp.png';
 
+//Some  more as per m skills...........
+import awslogo from './assets/tech_logo/AWS.png';
+import  djangologo from'./assets/tech_logo/Django.png';
+
 // Experience Section Logo's
 import iiitdmjlogo from './assets/company_logo/iiitdmj_logo.png';
 
@@ -45,6 +49,7 @@ import fusionlogo from './assets/work_logo/fusion_logo.png';
 import jobfinderlogo from './assets/work_logo/JobFinder.png';
 import pathfinderlogo from './assets/work_logo/pathfinder_logo.png';
 import rentconnectlogo from './assets/work_logo/RentConnect.png';
+import vendorlogo from './assets/work_logo/Vendor_Driver.png';
 
 export const SkillsInfo = [
   {
@@ -74,6 +79,7 @@ export const SkillsInfo = [
       { name: 'MongoDB', logo: mongodbLogo },
       { name: 'Firebase', logo: firebaseLogo },
       { name: 'PostgreSQL', logo: postgreLogo },
+      { name: 'Django', logo: djangologo },
     ],
   },
   {
@@ -99,6 +105,8 @@ export const SkillsInfo = [
       { name: 'Vercel', logo: vercelLogo },
       { name: 'Netlify', logo: netlifyLogo },
       { name: 'Figma', logo: figmaLogo },
+      { name: 'AWS', logo: awslogo },
+
     ],
   },
 ];
@@ -124,6 +132,20 @@ export const SkillsInfo = [
         "Django",
       ],
     },
+    {
+      id: 1,
+      img: iiitdmjlogo,
+      role: "Summer Research Intern",
+      company: "IITDM Jabalpur",
+      date: "May 2025 - July 2025",
+      desc: "Developed a secure data‐transfer solution between embedded devices using hardware cryptographic techniques. Implemented lightweight encryption with Nonlinear Feedback Shift Registers (NLFSRs) and Physically Unclonable Functions (PUFs) to guarantee both data confidentiality and device integrity, all synthesized and validated in Xilinx Vivado.",
+      skills: [
+        "Python",
+        "Verilog",
+        "Xilinx Vivado",
+      ],
+    },
+    
   ];
   
   export const education = [
@@ -179,6 +201,16 @@ export const SkillsInfo = [
     },
     {
       id: 2,
+      title: "Vendor and Driver Heirarchial Role Base Access Management System",
+      description:
+        "Developed a full-stack Fleet Management Platform supporting multi-level vendor hierarchies and role-based access for super, regional, city, and local vendors. The system enables seamless cab and driver onboarding, vehicle registration and assignment, document compliance (RC, Permit, Pollution), and real-time dashboards. Built using React, Node.js, Express, Tailwind CSS, and MongoDB for a responsive, scalable, and intuitive user experience.",
+      image: vendorlogo,
+      tags: ["React JS", "API", "HTML", "CSS", "JavaScript","Node Js","Express Js","MongoDb"],
+      github: "https://github.com/tushar66sharma/vendor-and-driver-management-system",
+      webapp: "https://drive.google.com/drive/folders/1rEClTNFbs2L-0_6ti1labZSn0TIXVdAC?usp=drive_link",
+    },
+    {
+      id: 3,
       title: "FootBall Analysis System",
       description:
         "The Football Analysis System is an intelligent video analytics tool designed to extract real-time insights from football match footage. Leveraging YOLO and OpenCV, it identifies players, referees, and the ball, enabling performance metrics like player speed and distance covered—making it a valuable tool for sports analysis and coaching.",
@@ -188,17 +220,17 @@ export const SkillsInfo = [
       webapp: "https://drive.google.com/drive/folders/1OMyOBnFBUL93rHz5LOG9UtARw98rwC4S",
     },
     {
-      id: 3,
+      id: 4,
       title: " Rent Connect ",
       description:
         "This mobile and web platform enables students to share and rent food, books, and supplies with ease. Designed for campus communities, it focuses on user-friendly design and real-time data handling to promote sustainability and resource sharing among students.",
       image: rentconnectlogo,
       tags: ["React Native", "Node.js","Express.js","TypeScript","JavaScript"," MongoDB","RestAPIs",],
       github: "https://github.com/tushar66sharma/RentConnect",
-      webapp: "https://www.npmjs.com/package/cmtk-email-validator",
+      webapp: "https://drive.google.com/drive/folders/1rEClTNFbs2L-0_6ti1labZSn0TIXVdAC?usp=drive_link",
     },
     {
-      id: 4,
+      id: 5,
       title: "Fuison (Institute ERP Portal)",
       description:
         "The Hostel Management System automates room allocation and fee management for institutional hostels, replacing manual workflows with a streamlined web-based solution. It enhances administrative efficiency, improves data handling, and ensures accuracy in operations.",

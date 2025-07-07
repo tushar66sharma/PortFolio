@@ -16,7 +16,8 @@ export default {
       },
       backgroundImage: {
         "skills-gradient":
-          "linear-gradient(38.73deg,rgba(19, 73, 189, 0.15) 0%,rgba(19, 73, 189, 0) 50%),linear-gradient(141.27deg,rgba(19, 73, 189, 0) 50%,rgba(19, 73, 189, 0.15) 100)",
+          "linear-gradient(38.73deg, rgba(19, 73, 189, 0.03) 0%, rgba(19, 73, 189, 0) 50%), " +
+          "linear-gradient(141.27deg, rgba(19, 73, 189, 0) 50%, rgba(19, 73, 189, 0.03) 100%)",
       },
     },
   },
