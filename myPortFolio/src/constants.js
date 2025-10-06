@@ -50,6 +50,7 @@ import jobfinderlogo from './assets/work_logo/JobFinder.png';
 import pathfinderlogo from './assets/work_logo/pathfinder_logo.png';
 import rentconnectlogo from './assets/work_logo/RentConnect.png';
 import vendorlogo from './assets/work_logo/Vendor_Driver.png';
+import agri_chatbot_logo from './assets/work_logo/agri_chatbot_logo.png';
 
 export const SkillsInfo = [
   {
@@ -239,4 +240,15 @@ export const SkillsInfo = [
       github: "https://github.com/tushar66sharma/FusionBackendWork_Myrepo",
       webapp: "http://fusion.iiitdmj.ac.in:8000/dashboard",
     },
+    {
+      id: 6,
+      title: "Agri-AI Weather Chatbot",
+      description:
+        "An AI-powered agricultural assistant that combines real-time weather, location, and generative AI to produce practical, multilingual crop-care suggestions. Built with a React + Vite frontend and a Node.js + Express backend using OpenRouter for LLM completions and Open-Meteo for weather data.",
+      image: agri_chatbot_logo,
+      tags: ["JavaScript","React.js","OpenRouter ","Express.js","Browser Web Speech API"," Vercel (frontend)"," Render (backend)"],
+      github: "https://github.com/tushar66sharma/agri-ai-weather-chatbot",
+      webapp: "https://agri-ai-weather-chatbot.vercel.app/",
+    },
+
   ];  
