@@ -59,17 +59,12 @@ export const About = () => {
 
           {/* About me Paragraph */}
           <p className="text-base sm:text-lg md:text-lg text-gray-400 mb-10 mt-8 leading-relaxed">
-            I’m Tushar Sharma, a full‑stack developer with over 2 years
-            experience building scalable, user‑centric web applications.
-            I specialize in the MERN stack (MongoDB, Express, React, Node.js)
-            alongside Python/Django and modern front‑end tools.
-            I thrive on crafting efficient, maintainable code and seamless UX
-            to solve real‑world problems.
+            I’m Tushar Sharma, a Software Engineer with experience building production-ready backend systems, full-stack web applications, and AI-powered solutions. I specialize in Python, FastAPI, TypeScript, React, PostgreSQL, and Google Cloud, with hands-on experience in designing scalable APIs, cloud infrastructure, CI/CD pipelines, and automation workflows. I enjoy solving complex engineering problems and building reliable, high-performance software that delivers real-world impact.
           </p>
 
           {/* Resume Button */}
           <a
-            href="https://drive.google.com/file/d/1IWJag3mjRh4aY6zzJVH-g6Xwg3g_X-gh/view?usp=sharing"
+            href="https://drive.google.com/file/d/1UCyThGN3WtYYY_5FgnzhLwHWx7Pyq8ED/view?usp=drive_link"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block text-white py-3 px-8 rounded-full mt-5 text-lg font-bold transition duration-300 transform hover:scale-105"

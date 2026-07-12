@@ -39,6 +39,7 @@ import  djangologo from'./assets/tech_logo/Django.png';
 // Experience Section Logo's
 import iiitdmjlogo from './assets/company_logo/iiitdmj_logo.png';
 import Aktsklogo from './assets/company_logo/Aktsk.jpg';
+import TechJapanlogo from './assets/company_logo/tech_japan_logo.jpg';
 
 // Education Section Logo's
 import iiitdmj1logo from './assets/education_logo/iiitdmj_logo.png';
@@ -116,10 +117,36 @@ export const SkillsInfo = [
   export const experiences = [
     {
       id: 0,
+      img: TechJapanlogo,
+      role: "Software Engineer",
+      company: "Talendy Holdings (Tech Japan Labs)",
+      date: "June 2026 - Present",
+      desc: "Building scalable backend services and AI-powered applications using Python, FastAPI, TypeScript, and Google Cloud. Contributing to cloud infrastructure, CI/CD automation, API development, monitoring, and production-ready systems with a focus on reliability and performance.",
+      skills: [
+        "JavaScript",
+        "React JS",
+        "TypeScript",
+        "Python",
+        "Tailwind CSS",
+        "Chakra UI",
+        "Python",
+        "Fast APIs",
+        "Google Cloud Platform",
+        "Gemini",
+        "PostgresSQL",
+        "Redux",
+        "Django",
+        "Yolov8",
+        "ResNet18",
+        "Alembic",
+      ],
+    },
+    {
+      id: 1,
       img: Aktsklogo,
       role: "Fullstack Developer",
       company: "Akatsuki AI Technologies",
-      date: "October 2025 - Present",
+      date: "October 2025 - May 2026",
       desc: "Contributed to building and maintaining production-grade applications, including an employee management and automated billing system that streamlined month-end operations and improved billing accuracy. Worked across multiple client-facing projects and supported end-to-end feature delivery.",
       skills: [
         "JavaScript",
@@ -138,7 +165,7 @@ export const SkillsInfo = [
       ],
     },
     {
-      id: 1,
+      id: 2,
       img: iiitdmjlogo,
       role: "Fullstack Developer",
       company: "IITDM Jabalpur",
@@ -158,7 +185,7 @@ export const SkillsInfo = [
       ],
     },
     {
-      id: 2,
+      id: 3,
       img: iiitdmjlogo,
       role: "Summer Research Intern",
       company: "IITDM Jabalpur",
