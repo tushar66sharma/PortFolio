@@ -111,6 +111,11 @@ class Page {
   async screenshot(file) {
     if (!SHOT_DIR) return;
     mkdirSync(SHOT_DIR, { recursive: true });
+    // Scroll through once so lazy images load, then wait for them before capturing.
+    await this.evaluate(
+      "(async () => { for (let y = 0; y < document.documentElement.scrollHeight; y += innerHeight / 2) { scrollTo(0, y); await new Promise(r => setTimeout(r, 40)); } scrollTo(0, 0); await Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; }))); return true; })()"
+    );
+    await sleep(200);
     const height = await this.evaluate("document.documentElement.scrollHeight");
     const { data } = await this.send("Page.captureScreenshot", { format: "png", captureBeyondViewport: true, clip: { x: 0, y: 0, width: this.width, height, scale: 1 } });
     writeFileSync(join(SHOT_DIR, file), Buffer.from(data, "base64"));
