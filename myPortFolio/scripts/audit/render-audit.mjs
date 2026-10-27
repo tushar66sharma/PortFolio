@@ -123,6 +123,20 @@ CHECKS.push(
   }
 );
 
+// --- Task 4: navbar ---
+const mainNav = () => (page.match(/<nav[^>]*aria-label="Main"[\s\S]*?<\/nav>/) || [""])[0];
+CHECKS.push(
+  { name: "navbar: brand TS-066", test: () => mainNav().includes("TS-066") || "main nav missing or has no TS-066 brand" },
+  {
+    name: "navbar: six section links",
+    test: () => {
+      const hrefs = ["#about", "#skills", "#experience", "#work", "#education", "#contact"].filter((h) => !mainNav().includes(`href="${h}"`));
+      return !hrefs.length || `main nav missing ${hrefs.join(", ")}`;
+    },
+  },
+  inHtml("navbar: theme toggle label", 'aria-label="Switch to dark theme"')
+);
+
 // --- run ---
 const failures = [];
 for (const c of CHECKS) {

@@ -169,6 +169,42 @@ const CHECKS = [
   },
 ];
 
+// --- Task 4: navbar ---
+CHECKS.push(
+  {
+    name: "themeToggle",
+    async run(p) {
+      await p.open(1024, "light");
+      await p.click(".js-theme-toggle");
+      const a = await p.evaluate("[document.documentElement.dataset.theme, localStorage.getItem('theme')]");
+      await p.click(".js-theme-toggle");
+      const b = await p.evaluate("[document.documentElement.dataset.theme, localStorage.getItem('theme')]");
+      const ok = a[0] === "dark" && a[1] === "dark" && b[0] === "light" && b[1] === "light";
+      return ok || `after 1st click ${a.join("/")}, after 2nd click ${b.join("/")}`;
+    },
+  },
+  {
+    name: "mobileMenu",
+    async run(p) {
+      await p.open(360, "light");
+      const before = await p.evaluate(
+        "({ desktop: (() => { const el = document.querySelector('.js-desktop-links'); return el ? getComputedStyle(el).display : 'missing'; })(), menu: !!document.getElementById('mobile-menu') })"
+      );
+      if (before.desktop !== "none") return `desktop links display=${before.desktop} at 360px`;
+      if (before.menu) return "mobile menu open before tapping the menu button";
+      await p.click(".js-menu");
+      const links = await p.evaluate("document.getElementById('mobile-menu') ? document.querySelectorAll('#mobile-menu a').length : -1");
+      if (links !== 6) return `menu after tap: ${links === -1 ? "not shown" : links + " links"}`;
+      await p.evaluate("[...document.querySelectorAll('#mobile-menu a')].find(a => a.textContent.trim() === 'Projects').click()");
+      await sleep(1200);
+      const after = await p.evaluate("({ open: !!document.getElementById('mobile-menu'), overflow: document.body.style.overflow, y: scrollY })");
+      if (after.open) return "menu still open after tapping Projects";
+      if (after.overflow === "hidden") return "page left scroll-locked";
+      return after.y > 0 || "page did not scroll to Projects";
+    },
+  }
+);
+
 const failures = [];
 try {
   const ws = new WebSocket(await pageSocket());
