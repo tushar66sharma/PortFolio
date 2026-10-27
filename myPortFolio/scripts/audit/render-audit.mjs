@@ -197,6 +197,15 @@ CHECKS.push(
   ...projects.flatMap((p) => [inHtml(`project ${p.id}: github link`, `href="${p.github}"`), inHtml(`project ${p.id}: live link`, `href="${p.webapp}"`)])
 );
 
+// --- Task 9: education certification record ---
+CHECKS.push(
+  inText("education: section tag", "CERT. RECORD"),
+  inText("education: note", "qualifications on file"),
+  inText("education: QUALIFICATION column", "QUALIFICATION"),
+  inText("education: intro", "My education has been a journey of learning and development. Here are the details of my academic background"),
+  ...education.map((e) => inHtml(`education ${e.id}: grade cell`, `data-grade="${e.grade}"`))
+);
+
 // --- run ---
 const failures = [];
 for (const c of CHECKS) {
