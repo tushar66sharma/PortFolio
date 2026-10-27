@@ -165,6 +165,27 @@ CHECKS.push(
   ])
 );
 
+// --- Task 7: experience revision history ---
+CHECKS.push(
+  inText("experience: section tag", "REV. HISTORY"),
+  inText("experience: note", "latest revision first"),
+  inText("experience: intro", "A collection of my work experience and the roles I have taken in various organizations"),
+  {
+    name: "experience: revision letters newest first",
+    test: () => {
+      const revs = [...page.matchAll(/data-rev="([A-Z])"/g)].map((m) => m[1]).join("");
+      return revs === "DCBA" || `revision order "${revs}", expected "DCBA"`;
+    },
+  },
+  {
+    name: "experience: one SPEC chip per skill entry (duplicates kept)",
+    test: () => {
+      const want = experiences.reduce((n, e) => n + e.skills.length, 0);
+      return count(/data-spec="/g) === want || `found ${count(/data-spec="/g)} SPEC chips, expected ${want}`;
+    },
+  }
+);
+
 // --- run ---
 const failures = [];
 for (const c of CHECKS) {
