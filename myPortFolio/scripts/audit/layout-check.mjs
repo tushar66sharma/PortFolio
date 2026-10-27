@@ -105,16 +105,20 @@ class Page {
   }
   async key(name) {
     const codes = { Enter: 13, Escape: 27, Tab: 9, " ": 32 };
-    for (const type of ["keyDown", "keyUp"]) await this.send("Input.dispatchKeyEvent", { type, key: name, code: name === " " ? "Space" : name, windowsVirtualKeyCode: codes[name] });
+    // Enter/Space carry their character so native buttons activate as they do for a real keypress.
+    const text = { Enter: "\r", " ": " " }[name];
+    for (const type of ["keyDown", "keyUp"])
+      await this.send("Input.dispatchKeyEvent", { type, key: name, code: name === " " ? "Space" : name, windowsVirtualKeyCode: codes[name], ...(type === "keyDown" && text ? { text } : {}) });
     await sleep(250);
   }
   async screenshot(file) {
     if (!SHOT_DIR) return;
     mkdirSync(SHOT_DIR, { recursive: true });
-    // Scroll through once so lazy images load, then wait for them before capturing.
-    await this.evaluate(
-      "(async () => { for (let y = 0; y < document.documentElement.scrollHeight; y += innerHeight / 2) { scrollTo(0, y); await new Promise(r => setTimeout(r, 40)); } scrollTo(0, 0); await Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; }))); return true; })()"
+    // Make lazy images load now, then wait (max 5s) for them before capturing.
+    const pending = await this.evaluate(
+      "(async () => { document.querySelectorAll('img[loading=lazy]').forEach(i => { i.loading = 'eager'; }); const loads = Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; }))); await Promise.race([loads, new Promise(r => setTimeout(r, 5000))]); await Promise.all([...document.images].map(i => i.decode().catch(() => 0))); return [...document.images].filter(i => !i.complete).length; })()"
     );
+    if (pending) console.log(`  note: ${pending} image(s) still loading in ${file}`);
     await sleep(200);
     const height = await this.evaluate("document.documentElement.scrollHeight");
     const { data } = await this.send("Page.captureScreenshot", { format: "png", captureBeyondViewport: true, clip: { x: 0, y: 0, width: this.width, height, scale: 1 } });
@@ -209,6 +213,34 @@ CHECKS.push(
     },
   }
 );
+
+// --- Task 8: project modal ---
+CHECKS.push({
+  name: "projectModal",
+  async run(p) {
+    const state = "({ modal: !!document.querySelector('.js-project-modal'), overflow: document.body.style.overflow, label: document.activeElement?.getAttribute('aria-label'), onCard: document.activeElement?.classList.contains('js-project-card') })";
+    const bad = [];
+    for (const w of [360, 1440]) {
+      await p.open(w, "light");
+      await p.evaluate("document.querySelector('.js-project-card').focus()");
+      await p.key("Enter");
+      const open = await p.evaluate(state);
+      if (!open.modal) bad.push(`${w}px: Enter did not open the modal`);
+      if (open.overflow !== "hidden") bad.push(`${w}px: page not scroll-locked while open`);
+      if (open.label !== "Close project details") bad.push(`${w}px: focus on "${open.label}", expected the close button`);
+      await p.key("Escape");
+      const closed = await p.evaluate(state);
+      if (closed.modal) bad.push(`${w}px: Escape did not close the modal`);
+      if (closed.overflow === "hidden") bad.push(`${w}px: scroll lock not released`);
+      if (!closed.onCard) bad.push(`${w}px: focus did not return to the card`);
+    }
+    await p.click(".js-project-card");
+    if (!(await p.evaluate("!!document.querySelector('.js-project-modal')"))) bad.push("1440px: click did not open the modal");
+    await p.clickAt(5, 5);
+    if (await p.evaluate("!!document.querySelector('.js-project-modal')")) bad.push("1440px: backdrop click did not close the modal");
+    return bad.length ? bad.join("; ") : true;
+  },
+});
 
 const failures = [];
 try {
