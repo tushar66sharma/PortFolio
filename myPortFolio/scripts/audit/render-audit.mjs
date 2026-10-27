@@ -15,7 +15,7 @@ await build({
   configFile: join(root, "vite.config.js"),
   logLevel: "error",
   build: {
-    ssr: "scripts/audit/entry-server.jsx",
+    ssr: "scripts/audit/entry-server.js",
     outDir,
     emptyOutDir: true,
     rollupOptions: { output: { format: "es", entryFileNames: "entry-server.mjs" } },
@@ -94,6 +94,33 @@ CHECKS.push(
   ...["Full-Stack Developer", "App Developer", "Competitive Programmer", "Open-Source Contributor"].map((w) =>
     inSource(`about: role word ${w}`, "src/components/About/About.jsx", `"${w}"`)
   )
+);
+
+// --- Task 3: sheet frame, references row, footer, drawing helpers ---
+const count = (re) => (page.match(re) || []).length;
+CHECKS.push(
+  inText("references: label", "REFERENCES"),
+  ...[
+    ["REF-01", "tushar66sharma"],
+    ["REF-02", "tushar-sharma"],
+    ["REF-03", "DynamicCoder_66"],
+    ["REF-04", "DynamicCoder_66"],
+    ["REF-05", "dynamiccoder66"],
+  ].flatMap(([ref, handle]) => [inText(`references: ${ref}`, ref), inText(`references: ${ref} handle`, handle)]),
+  inText("footer: drawing note", "DO NOT SCALE DRAWING"),
+  inText("footer: copyright", "© 2026 Tushar Sharma. All rights reserved."),
+  inHtml("footer: projects link targets #work", 'href="#work"'),
+  { name: "footer: no dead #projects link", test: () => !page.includes('href="#projects"') || 'found href="#projects"' },
+  { name: "sheet: six zone markers", test: () => count(/data-zone="/g) === 6 || `found ${count(/data-zone="/g)} zone markers` },
+  {
+    name: "drawing helpers",
+    test: () => {
+      if (typeof mod.revLetter !== "function") return "drawing helpers not exported from entry-server";
+      const c = mod.getCounts();
+      const ok = mod.revLetter(0, 4) === "D" && mod.revLetter(3, 4) === "A" && mod.detailLetter(6) === "G" && c.roles === 4 && c.projects === 7 && c.skills === 36;
+      return ok || `got revLetter(0,4)=${mod.revLetter(0, 4)} revLetter(3,4)=${mod.revLetter(3, 4)} detailLetter(6)=${mod.detailLetter(6)} counts=${JSON.stringify(c)}`;
+    },
+  }
 );
 
 // --- run ---
