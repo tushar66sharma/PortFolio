@@ -186,6 +186,17 @@ CHECKS.push(
   }
 );
 
+// --- Task 8: projects detail views ---
+CHECKS.push(
+  inText("projects: section tag", "DETAIL VIEWS"),
+  inText("projects: note", "scale 2 : 1"),
+  inText("projects: intro", "A showcase of the projects I have worked on, highlighting my skills and experience in various technologies"),
+  ...projects.map((p, i) => inText(`projects: callout ${i}`, `DETAIL ${String.fromCharCode(65 + i)}`)),
+  { name: "projects: Source link on every card", test: () => (text.match(/Source ↗/g) || []).length === projects.length || `found ${(text.match(/Source ↗/g) || []).length} Source links` },
+  // moved from Task 1: the old design only rendered these inside the modal
+  ...projects.flatMap((p) => [inHtml(`project ${p.id}: github link`, `href="${p.github}"`), inHtml(`project ${p.id}: live link`, `href="${p.webapp}"`)])
+);
+
 // --- run ---
 const failures = [];
 for (const c of CHECKS) {
