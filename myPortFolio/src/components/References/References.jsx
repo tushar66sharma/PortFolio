@@ -12,20 +12,20 @@ const cellBorders = (i) =>
     .filter(Boolean)
     .join(" ");
 
-const ReferenceLink = ({ profile, index }) => {
+const ReferenceLink = ({ profile }) => {
   const { code, platform, handle, url, Icon } = profile;
   return (
     <a
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex h-full min-w-0 items-center gap-3 px-3 py-2.5 no-underline transition-colors hover:bg-paper"
+      className="group flex h-full min-w-0 items-center gap-2.5 px-3 py-2.5 no-underline transition-colors hover:bg-paper"
     >
-      <Icon aria-hidden="true" className="size-4 shrink-0 text-line transition-colors group-hover:text-accent" />
+      <Icon aria-hidden="true" className="hidden size-4 shrink-0 text-line transition-colors group-hover:text-accent sm:block lg:hidden xl:block" />
       <span className="flex min-w-0 flex-col">
-        <span className="truncate text-[9.5px] uppercase tracking-[0.14em] text-muted">
+        <span className="truncate text-[9.5px] uppercase tracking-[0.12em] text-muted">
           <b className="mr-1.5 border border-accent px-1 font-medium text-accent">{code}</b>
-          REF-0{index + 1} · {platform}
+          {platform}
         </span>
         <span className="truncate text-[12.5px] font-medium transition-colors group-hover:text-accent">
           {handle} <span aria-hidden="true">↗</span>
@@ -43,7 +43,7 @@ export const References = () => (
     <ul className="grid grid-cols-2 lg:grid-cols-5">
       {profiles.map((profile, i) => (
         <li key={profile.id} className={`min-w-0 border-line ${cellBorders(i)}`}>
-          <ReferenceLink profile={profile} index={i} />
+          <ReferenceLink profile={profile} />
         </li>
       ))}
     </ul>

@@ -101,11 +101,11 @@ const count = (re) => (page.match(re) || []).length;
 CHECKS.push(
   inText("references: label", "REFERENCES"),
   ...[
-    ["REF-01", "tushar66sharma"],
-    ["REF-02", "tushar-sharma"],
-    ["REF-03", "DynamicCoder_66"],
-    ["REF-04", "DynamicCoder_66"],
-    ["REF-05", "dynamiccoder66"],
+    ["GitHub", "tushar66sharma"],
+    ["LinkedIn", "tushar-sharma"],
+    ["LeetCode", "DynamicCoder_66"],
+    ["Codeforces", "DynamicCoder_66"],
+    ["CodeChef", "dynamiccoder66"],
   ].flatMap(([ref, handle]) => [inText(`references: ${ref}`, ref), inText(`references: ${ref} handle`, handle)]),
   inText("footer: drawing note", "DO NOT SCALE DRAWING"),
   inText("footer: copyright", "© 2026 Tushar Sharma. All rights reserved."),
@@ -135,6 +135,22 @@ CHECKS.push(
     },
   },
   inHtml("navbar: theme toggle label", 'aria-label="Switch to dark theme"')
+);
+
+// --- Task 5: hero ---
+const titleBlock = () => squash(decode((html.match(/aria-label="Title block"[\s\S]*?<\/aside>/) || [""])[0].replace(/<[^>]+>/g, " ")));
+CHECKS.push(
+  inText("hero: eyebrow", "GENERAL ARRANGEMENT"),
+  inText("hero: first role word typed on first paint", "Full-Stack Developer"),
+  inText("hero: dimension line", "4 ROLES · 7 PROJECTS · 36 SKILLS"),
+  inText("hero: photo label", "FRONT ELEVATION"),
+  inText("hero: CV button", "Download CV"),
+  inHtml("hero: photo alt", 'alt="Tushar Sharma"'),
+  { name: "hero: exactly one h1", test: () => count(/<h1[\s>]/g) === 1 || `found ${count(/<h1[\s>]/g)} h1 elements` },
+  ...["Talendy Holdings (Tech Japan Labs)", "B.Tech CSE · 8.4 CPI", "D · 1 OF 1", "TS-066"].map((v) => ({
+    name: `hero: title block shows ${v}`,
+    test: () => titleBlock().includes(v) || `title block missing "${v}"`,
+  }))
 );
 
 // --- run ---
