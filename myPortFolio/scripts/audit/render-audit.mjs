@@ -153,6 +153,18 @@ CHECKS.push(
   }))
 );
 
+// --- Task 6: skills parts list ---
+CHECKS.push(
+  inText("skills: section tag", "SECTION B–B"),
+  inText("skills: note", "bill of materials by assembly"),
+  inText("skills: intro", "A collection of my technical skills and expertise honed through various projects and experiences"),
+  inText("skills: ASSEMBLY column", "ASSEMBLY"),
+  ...SkillsInfo.flatMap((cat) => [
+    inHtml(`skills: ${cat.title} quantity`, `data-qty="${cat.skills.length}"`),
+    ...cat.skills.map((s) => inHtml(`skills: ${cat.title}/${s.name} logo`, `alt="${s.name} logo"`)),
+  ])
+);
+
 // --- run ---
 const failures = [];
 for (const c of CHECKS) {
