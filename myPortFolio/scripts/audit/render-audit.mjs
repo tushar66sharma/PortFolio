@@ -206,6 +206,18 @@ CHECKS.push(
   ...education.map((e) => inHtml(`education ${e.id}: grade cell`, `data-grade="${e.grade}"`))
 );
 
+// --- Task 10: contact transmittal ---
+CHECKS.push(
+  inText("contact: section tag", "TRANSMITTAL"),
+  inText("contact: form header", "TRANSMITTAL NO. TS-066-T"),
+  inText("contact: send button", "SEND TRANSMITTAL"),
+  inText("contact: intro", "I’d love to hear from you—reach out for any opportunities or questions!"),
+  ...["email", "name", "subject", "message"].flatMap((f) => [
+    inHtml(`contact: label for ${f}`, `for="contact-${f}"`),
+    inHtml(`contact: field id ${f}`, `id="contact-${f}"`),
+  ])
+);
+
 // --- run ---
 const failures = [];
 for (const c of CHECKS) {
