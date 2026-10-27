@@ -242,6 +242,23 @@ CHECKS.push({
   },
 });
 
+// --- Task 11: footer rows ---
+CHECKS.push({
+  name: "footerNoOrphans",
+  async run(p) {
+    const bad = [];
+    for (const w of [360, 1440]) {
+      await p.open(w, "light");
+      const rows = await p.evaluate(
+        "(() => { const f = document.querySelector('footer'); const tops = (sel) => new Set([...f.querySelectorAll(sel)].map(e => Math.round(e.getBoundingClientRect().top))).size; return { icons: tops('a[aria-label]'), links: tops('nav a') }; })()"
+      );
+      if (rows.icons !== 1) bad.push(`${w}px: social icons span ${rows.icons} rows`);
+      if (w >= 1024 && rows.links !== 1) bad.push(`${w}px: footer links span ${rows.links} rows`);
+    }
+    return bad.length ? bad.join("; ") : true;
+  },
+});
+
 const failures = [];
 try {
   const ws = new WebSocket(await pageSocket());
