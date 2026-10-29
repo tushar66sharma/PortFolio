@@ -259,6 +259,16 @@ CHECKS.push({
   },
 });
 
+CHECKS.push({
+  name: "reducedMotionTypewriterIdle",
+  async run(p) {
+    await p.open(1024, "light", { reducedMotion: true });
+    await sleep(3000);
+    const role = await p.evaluate("document.querySelector('#about p > span.font-medium')?.textContent");
+    return role === "Full-Stack Developer" || `hero role after 3s with reduced motion: "${role}"`;
+  },
+});
+
 const failures = [];
 try {
   const ws = new WebSocket(await pageSocket());
