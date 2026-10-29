@@ -4,6 +4,9 @@ import { SiCodechef, SiCodeforces, SiLeetcode } from "react-icons/si";
 
 export const DRAWING_NO = "TS-066";
 
+export const ABOUT_TEXT =
+  "I’m Tushar Sharma, a Software Engineer with experience building production-ready backend systems, full-stack web applications, and AI-powered solutions. I specialize in Python, FastAPI, TypeScript, React, PostgreSQL, and Google Cloud, with hands-on experience in designing scalable APIs, cloud infrastructure, CI/CD pipelines, and automation workflows. I enjoy solving complex engineering problems and building reliable, high-performance software that delivers real-world impact.";
+
 export const RESUME_URL = "https://drive.google.com/file/d/1UCyThGN3WtYYY_5FgnzhLwHWx7Pyq8ED/view?usp=drive_link";
 
 export const sections = [
@@ -28,3 +31,12 @@ export const instagram = {
   url: "https://www.instagram.com/i_tushar_66?igsh=MXIxc3J6d3lyN3I4dA==",
   Icon: FaInstagram,
 };
+
+// Suggested questions shown as pills when the chat opens.
+export const CHAT_SAMPLES = [
+  "What is Tushar's current role?",
+  "What's his tech stack?",
+  "Which projects has he built?",
+  "What did he study?",
+  "How can I contact him?",
+];

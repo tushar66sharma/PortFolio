@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import profileImage from "../../assets/profile5.png";
 import { education, experiences } from "../../constants";
 import { getCounts, revLetter } from "../../drawing";
-import { DRAWING_NO, RESUME_URL } from "../../site";
+import { ABOUT_TEXT, DRAWING_NO, RESUME_URL } from "../../site";
 
 const ROLE_WORDS = [
   "Full-Stack Developer",
@@ -115,7 +115,7 @@ export const About = () => {
         </h1>
 
         <p className="mb-7 max-w-[60ch] text-[15px] leading-relaxed text-muted">
-          I’m Tushar Sharma, a Software Engineer with experience building production-ready backend systems, full-stack web applications, and AI-powered solutions. I specialize in Python, FastAPI, TypeScript, React, PostgreSQL, and Google Cloud, with hands-on experience in designing scalable APIs, cloud infrastructure, CI/CD pipelines, and automation workflows. I enjoy solving complex engineering problems and building reliable, high-performance software that delivers real-world impact.
+          {ABOUT_TEXT}
         </p>
 
         <div className="flex flex-wrap gap-3">
