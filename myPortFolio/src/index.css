@@ -1,18 +1,158 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-
 @import "tailwindcss";
 
+/* Theme is chosen by the pre-paint script in index.html (data-theme on <html>) */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
-*{
-    font-family:"Poppins", sans-serif;
+/* Blueprint tokens. Light = drafting film, dark = cyanotype blueprint */
+:root {
+  --bp-paper: #edf2f8;
+  --bp-panel: #f7faff;
+  --bp-ink: #0f2b55;
+  --bp-muted: #4b6690;
+  --bp-line: #1d4f9c;
+  --bp-accent: #c2410c;
+  --bp-grid: rgba(24, 74, 150, 0.07);
+  --bp-grid-major: rgba(24, 74, 150, 0.15);
+  color-scheme: light;
 }
 
-html{
-    scroll-behavior: smooth;
+:root[data-theme="dark"] {
+  --bp-paper: #0a2a55;
+  --bp-panel: #0c3166;
+  --bp-ink: #eef5ff;
+  --bp-muted: #9fbce4;
+  --bp-line: #cfe1ff;
+  --bp-accent: #ffb35c;
+  --bp-grid: rgba(205, 225, 255, 0.055);
+  --bp-grid-major: rgba(205, 225, 255, 0.12);
+  color-scheme: dark;
 }
 
-@layer utilities{
-    .clip-path-custom{
-        clip-path:polygon(0 0,100% 0,100% 98%,75% 95%,0 100%);
+@theme inline {
+  --color-paper: var(--bp-paper);
+  --color-panel: var(--bp-panel);
+  --color-ink: var(--bp-ink);
+  --color-muted: var(--bp-muted);
+  --color-line: var(--bp-line);
+  --color-accent: var(--bp-accent);
+  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+
+@layer base {
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
     }
+  }
+
+  body {
+    @apply bg-paper text-ink font-mono;
+    font-size: 14px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      linear-gradient(var(--bp-grid-major) 1px, transparent 1px),
+      linear-gradient(90deg, var(--bp-grid-major) 1px, transparent 1px),
+      linear-gradient(var(--bp-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--bp-grid) 1px, transparent 1px);
+    background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+  }
+
+  section[id] {
+    scroll-margin-top: 84px;
+  }
+
+  ::selection {
+    background: var(--bp-accent);
+    color: var(--bp-paper);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--bp-accent);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Repeated drawing devices; everything else stays inline Tailwind */
+@layer components {
+  .bp-sheet {
+    border: 2px solid var(--bp-line);
+    outline: 1px solid var(--bp-line);
+    outline-offset: 3px;
+    background: color-mix(in srgb, var(--bp-paper) 72%, transparent);
+  }
+  @media (min-width: 640px) {
+    .bp-sheet {
+      outline-offset: 5px;
+    }
+  }
+
+  .bp-label {
+    @apply text-muted uppercase;
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+  }
+
+  .bp-tag {
+    @apply text-accent border border-accent px-2 uppercase;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    line-height: 1.6;
+  }
+
+  .bp-btn {
+    @apply inline-flex items-center justify-center gap-2 min-h-10 px-[18px] py-2.5 bg-line text-paper border-[1.5px] border-line uppercase no-underline cursor-pointer transition-colors;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+  }
+  .bp-btn:hover {
+    @apply bg-accent border-accent;
+  }
+  .bp-btn-ghost {
+    @apply bg-transparent text-ink;
+  }
+  .bp-btn-ghost:hover {
+    @apply bg-transparent text-accent border-accent;
+  }
+
+  .bp-chip {
+    @apply inline-flex items-center gap-1.5 border border-dashed border-line px-2 py-0.5;
+    font-size: 12px;
+  }
+
+  .bp-tri {
+    @apply grid place-items-center bg-accent text-paper font-semibold;
+    width: 30px;
+    height: 26px;
+    padding-top: 6px;
+    font-size: 12px;
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  }
+
+  .bp-callout {
+    @apply grid place-items-center shrink-0 rounded-full text-accent border-[1.5px] border-accent;
+    width: 30px;
+    height: 30px;
+    font-size: 13px;
+  }
+
+  .bp-dim {
+    @apply flex items-center gap-1.5 text-accent;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+  .bp-dim > i {
+    @apply flex-1 h-px bg-current;
+  }
 }

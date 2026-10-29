@@ -1,192 +1,104 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
-import { FaGithub, FaLinkedin } from "react-icons/fa";
-import { SiLeetcode, SiCodechef, SiCodeforces } from "react-icons/si";
+import { DRAWING_NO, sections } from "../../site";
+import { ThemeToggle } from "../ui/ThemeToggle";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState(false);
+  const [activeSection, setActiveSection] = useState("about");
   const [isScrolled, setIsScrolled] = useState(false);
+  const headerRef = useRef(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-   const handleMenuItemClick = (sectionId) => {
-    setActiveSection(sectionId);
-    setIsOpen(false);
+  // Highlight the section that crosses the middle of the screen.
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && setActiveSection(e.target.id)),
+      { rootMargin: "-45% 0px -50% 0px" }
+    );
+    sections.forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
 
-    const sectionEl = document.getElementById(sectionId);
-    if (sectionEl) {
-      sectionEl.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  };
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e) => e.key === "Escape" && setIsOpen(false);
+    const onPointer = (e) => headerRef.current && !headerRef.current.contains(e.target) && setIsOpen(false);
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("pointerdown", onPointer);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("pointerdown", onPointer);
+    };
+  }, [isOpen]);
 
-  const menuItems = [
-    { id: "about", label: "About" },
-    { id: "skills", label: "Skills" },
-    { id: "experience", label: "Experience" },
-    { id: "work", label: "Projects" },
-    { id: "education", label: "Education" },
-  ];
+  const linkClass = (id) =>
+    `text-xs uppercase tracking-[0.12em] no-underline transition-colors hover:text-accent ${
+      activeSection === id ? "text-accent" : ""
+    }`;
+
   return (
-    <nav
-      className={`fixed top-0 w-full z-50 transition duration-300 px-[7vw] md:px-[7vw] lg:px-[20vw] ${
-        isScrolled
-          ? "bg-[#050414] bg-opacity-50 backdrop-blur-md shadow-md"
-          : "bg-transparent"
+    <header
+      ref={headerRef}
+      className={`fixed inset-x-0 top-0 z-50 pt-[env(safe-area-inset-top)] transition-colors duration-300 ${
+        isScrolled || isOpen ? "border-b border-line bg-paper/85 backdrop-blur-md" : "border-b border-transparent bg-transparent"
       }`}
     >
-      <div className="text-white py-5 flex justify-between items-center">
-        <div className="text-lg font-semibold cursor-pointer mx-4">
-          <span className="text-[#1349bd]">&lt;</span>
-          <span className="text-white">Tushar</span>
-          <span className="text-[#1349bd]">/</span>
-          <span className="text-white">Sharma</span>
-          <span className="text-[#1349bd]">&gt;</span>
-        </div>
+      <div className="mx-auto max-w-[1160px] pl-[max(16px,env(safe-area-inset-left))] pr-[max(16px,env(safe-area-inset-right))]">
+        <nav aria-label="Main" className="flex h-16 items-center justify-between gap-4">
+          <a href="#about" className="font-display text-[22px] font-bold uppercase tracking-[0.06em] no-underline">
+            {DRAWING_NO} <span aria-hidden="true" className="text-accent">⌖</span>
+            <span className="ml-2 hidden font-medium text-muted sm:inline">Tushar Sharma</span>
+          </a>
 
-        <ul className="hidden md:flex space-x-8 text-gray-300 mx-4">
-          {menuItems.map((item) => (
-            <li
-              key={item.id}
-              className={`cursor-pointer hover:text-[#1349bd] ${
-                activeSection === item.id ? "text-[#1349bd]" : ""
-              }`}
+          <ul className="js-desktop-links hidden items-center gap-6 lg:flex">
+            {sections.map(({ id, label }) => (
+              <li key={id}>
+                <a href={`#${id}`} className={linkClass(id)} aria-current={activeSection === id ? "true" : undefined}>
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <button
+              type="button"
+              onClick={() => setIsOpen((o) => !o)}
+              aria-expanded={isOpen}
+              aria-controls="mobile-menu"
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              className="js-menu grid size-10 cursor-pointer place-items-center border-[1.5px] border-line text-line lg:hidden"
             >
-              <button onClick={() => handleMenuItemClick(item.id)}>
-                {item.label}
-              </button>
-            </li>
-          ))}
-        </ul>
-
-        <div className="hidden md:flex space-x-8 mx-4">
-          <a
-            href="https://github.com/tushar66sharma"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-300 hover:text-[#1349bd]"
-          >
-            <FaGithub size={24} />
-          </a>
-
-          <a
-            href="https://www.linkedin.com/in/tushar-sharma-599992256/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-300 hover:text-[#1349bd]"
-          >
-            <FaLinkedin size={24} />
-          </a>
-          <a
-            href="https://leetcode.com/u/DynamicCoder_66/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-300 hover:text-[#1349bd]"
-          >
-            <SiLeetcode size={24} />
-          </a>
-          <a
-            href="https://www.codechef.com/users/dynamiccoder66"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-300 hover:text-[#1349bd]"
-          >
-            <SiCodechef size={24} />
-          </a>
-          <a
-            href="https://codeforces.com/profile/DynamicCoder_66"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-300 hover:text-[#1349bd]"
-          >
-            <SiCodeforces size={24} />
-          </a>
-        </div>
-
-        <div className="md:hidden">
-          {isOpen ? (
-            <FiX
-              className="text-3xl text-[#1349bd] cursor-pointer"
-              onClick={() => setIsOpen(false)}
-            />
-          ) : (
-            <FiMenu
-              className="text-3xl text-[#1349bd] cursor-pointer"
-              onClick={() => setIsOpen(true)}
-            />
-          )}
-        </div>
+              {isOpen ? <FiX aria-hidden="true" className="size-5" /> : <FiMenu aria-hidden="true" className="size-5" />}
+            </button>
+          </div>
+        </nav>
       </div>
 
       {isOpen && (
-        <div className="absolute top-16 left-1/2 -translate-x-1/2 w-4/5 bg-[#050414]/70 bg-opacity-100 backdrop-blur-lg z-50 rounded-lg shadow-lg transform">
-          <ul className="flex flex-col items-center space-y-4 py-4 text-gray-300">
-            {menuItems.map((item) => (
-              <li
-                key={item.id}
-                className={`cursor-pointer hover:text-white ${
-                  activeSection === item.id ? "text-[#1349bd]" : ""
-                }`}
-              >
-                <button onClick={() => handleMenuItemClick(item.id)}>
-                  {item.label}
-                </button>
+        <div id="mobile-menu" className="border-t border-line bg-paper lg:hidden">
+          <ul className="mx-auto grid max-w-[1160px] grid-cols-2 pl-[max(16px,env(safe-area-inset-left))] pr-[max(16px,env(safe-area-inset-right))] sm:grid-cols-3">
+            {sections.map(({ id, label }) => (
+              <li key={id} className="border-b border-dashed border-line">
+                <a href={`#${id}`} onClick={() => setIsOpen(false)} className={`flex min-h-12 items-center ${linkClass(id)}`}>
+                  {label}
+                </a>
               </li>
             ))}
-
-            <div className="flex space-x-4">
-              <a
-                href="https://github.com/tushar66sharma"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-300 hover:text-white"
-              >
-                <FaGithub size={24} />
-              </a>
-
-              <a
-                href="https://www.linkedin.com/in/tushar-sharma-599992256/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-300 hover:text-[#1349bd]"
-              >
-                <FaLinkedin size={24} />
-              </a>
-              <a
-                href="https://leetcode.com/u/DynamicCoder_66/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-300 hover:text-[#1349bd]"
-              >
-                <SiLeetcode size={24} />
-              </a>
-              <a
-                href="https://www.codechef.com/users/dynamiccoder66"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-300 hover:text-[#1349bd]"
-              >
-                <SiCodechef size={24} />
-              </a>
-              <a
-                href="https://codeforces.com/profile/DynamicCoder_66"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-300 hover:text-[#1349bd]"
-              >
-                <SiCodeforces size={24} />
-              </a>
-            </div>
           </ul>
         </div>
       )}
-    </nav>
+    </header>
   );
 };
