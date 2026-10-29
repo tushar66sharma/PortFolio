@@ -48,8 +48,10 @@ class Page {
     this.id = 0;
     this.pending = new Map();
     this.listeners = [];
+    this.handlers = {};
     ws.addEventListener("message", (ev) => {
       const msg = JSON.parse(ev.data);
+      if (msg.method && this.handlers[msg.method]) this.handlers[msg.method](msg.params);
       if (msg.id && this.pending.has(msg.id)) {
         const { res, rej } = this.pending.get(msg.id);
         this.pending.delete(msg.id);
@@ -110,6 +112,27 @@ class Page {
     for (const type of ["keyDown", "keyUp"])
       await this.send("Input.dispatchKeyEvent", { type, key: name, code: name === " " ? "Space" : name, windowsVirtualKeyCode: codes[name], ...(type === "keyDown" && text ? { text } : {}) });
     await sleep(250);
+  }
+  async type(text) {
+    await this.send("Input.insertText", { text });
+    await sleep(100);
+  }
+  // Answers POST /api/chat in the browser with a fixed reply; returns a live request counter.
+  async mockChat({ reply = "Tushar is a Software Engineer at Talendy.", kind = "answer", delayMs = 0 } = {}) {
+    const counter = { requests: 0 };
+    this.handlers["Fetch.requestPaused"] = async ({ requestId }) => {
+      counter.requests++;
+      if (delayMs) await sleep(delayMs);
+      const body = Buffer.from(JSON.stringify({ reply, kind })).toString("base64");
+      await this.send("Fetch.fulfillRequest", {
+        requestId,
+        responseCode: 200,
+        responseHeaders: [{ name: "content-type", value: "application/json" }],
+        body,
+      });
+    };
+    await this.send("Fetch.enable", { patterns: [{ urlPattern: "*/api/chat*" }] });
+    return counter;
   }
   async screenshot(file) {
     if (!SHOT_DIR) return;
@@ -268,6 +291,119 @@ CHECKS.push({
     return role === "Full-Stack Developer" || `hero role after 3s with reduced motion: "${role}"`;
   },
 });
+
+// --- Chat widget ---
+const SAMPLE = "What is Tushar's current role?";
+const panelRect = "(() => { const r = document.querySelector('#chat-panel')?.getBoundingClientRect(); return r && [r.left, r.top, r.width, r.height]; })()";
+const logText = "document.querySelector('.js-chat-log')?.innerText ?? ''";
+
+CHECKS.push(
+  {
+    name: "chatLauncherPosition",
+    async run(p) {
+      const bad = [];
+      for (const w of [360, 1440]) {
+        await p.open(w, "light");
+        const pos = await p.evaluate(
+          "(() => { const r = document.querySelector('.js-chat-launcher')?.getBoundingClientRect(); return r && [innerWidth - r.right, innerHeight - r.bottom, getComputedStyle(document.querySelector('.js-chat-launcher')).position]; })()"
+        );
+        if (!pos) bad.push(`${w}px: no launcher`);
+        else if (pos[0] < 0 || pos[0] > 24 || pos[1] < 0 || pos[1] > 24 || pos[2] !== "fixed") bad.push(`${w}px: right gap ${pos[0]}, bottom gap ${pos[1]}, ${pos[2]}`);
+      }
+      return bad.length ? bad.join("; ") : true;
+    },
+  },
+  {
+    name: "chatOpensAndAnswers",
+    async run(p) {
+      await p.open(1440, "light");
+      await p.mockChat();
+      await p.click(".js-chat-launcher");
+      if (!(await p.evaluate("!!document.querySelector('#chat-panel')"))) return "panel did not open";
+      const focused = await p.evaluate("document.activeElement?.id");
+      if (focused !== "chat-input") return `focus on "${focused}", not the input`;
+      const samples = await p.evaluate("[...document.querySelectorAll('.js-chat-sample')].map(b => b.textContent.trim())");
+      if (samples.length !== 5 || samples[0] !== SAMPLE) return `samples: ${JSON.stringify(samples)}`;
+      if (await p.evaluate("!!document.querySelector('.js-chat-dot')")) return "unread dot still shown after opening";
+      await p.click(".js-chat-sample");
+      await sleep(600);
+      const log = await p.evaluate(logText);
+      if (!log.includes(SAMPLE)) return "sample question not shown as a user message";
+      if (!log.includes("Tushar is a Software Engineer at Talendy.")) return `reply missing; log: ${log.slice(-120)}`;
+      if (await p.evaluate("document.querySelectorAll('.js-chat-sample').length")) return "samples still shown after first message";
+      return true;
+    },
+  },
+  {
+    name: "chatFullScreenOnPhone",
+    async run(p) {
+      await p.open(360, "light");
+      await p.click(".js-chat-launcher");
+      const r = await p.evaluate(panelRect);
+      const [vw, vh] = await p.evaluate("[innerWidth, innerHeight]");
+      if (!r) return "panel did not open";
+      return (Math.abs(r[0]) <= 1 && Math.abs(r[1]) <= 1 && Math.abs(r[2] - vw) <= 1 && Math.abs(r[3] - vh) <= 1) || `panel ${r.map(Math.round)} vs viewport ${vw}x${vh}`;
+    },
+  },
+  {
+    name: "chatEscapeClosesAndRestoresFocus",
+    async run(p) {
+      await p.open(1440, "light");
+      await p.click(".js-chat-launcher");
+      await p.key("Escape");
+      if (await p.evaluate("!!document.querySelector('#chat-panel')")) return "panel still open after Escape";
+      return (await p.evaluate("document.activeElement?.classList.contains('js-chat-launcher')")) || "focus did not return to the launcher";
+    },
+  },
+  {
+    name: "chatSingleRequestWhilePending",
+    async run(p) {
+      await p.open(1440, "light");
+      const counter = await p.mockChat({ delayMs: 1000 });
+      await p.click(".js-chat-launcher");
+      await p.type("What is his tech stack?");
+      await p.key("Enter");
+      await p.key("Enter");
+      await p.evaluate("document.querySelector('.js-chat-send')?.click()");
+      await sleep(1500);
+      return counter.requests === 1 || `${counter.requests} requests sent`;
+    },
+  },
+  {
+    name: "chatLongWordWraps",
+    async run(p) {
+      await p.open(360, "light");
+      await p.mockChat({ reply: "a".repeat(300) });
+      await p.click(".js-chat-launcher");
+      await p.type("b".repeat(300));
+      await p.key("Enter");
+      await sleep(600);
+      const [sw, iw, worst] = await p.evaluate(
+        "[document.documentElement.scrollWidth, innerWidth, Math.max(0, ...[...document.querySelectorAll('.js-chat-log > *')].map(e => e.scrollWidth - e.clientWidth))]"
+      );
+      if (sw > iw) return `page scrollWidth ${sw} > ${iw}`;
+      return worst <= 1 || `a message overflows its bubble by ${worst}px`;
+    },
+  },
+  {
+    name: "chatPanelNoOverflow",
+    async run(p) {
+      const bad = [];
+      for (const w of [360, 1440])
+        for (const s of SCHEMES) {
+          await p.open(w, s);
+          await p.click(".js-chat-launcher");
+          const [sw, iw] = await p.evaluate("[document.documentElement.scrollWidth, innerWidth]");
+          if (sw > iw) bad.push(`${w}px ${s}: scrollWidth ${sw} > ${iw}`);
+          if (SHOT_DIR) {
+            const { data } = await p.send("Page.captureScreenshot", { format: "png" });
+            writeFileSync(join(SHOT_DIR, `chat-open-${w}-${s}.png`), Buffer.from(data, "base64"));
+          }
+        }
+      return bad.length ? bad.join("; ") : true;
+    },
+  }
+);
 
 const failures = [];
 try {
