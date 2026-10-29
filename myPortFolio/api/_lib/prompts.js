@@ -26,8 +26,8 @@ Rules:
 - If any part of the question is not about Tushar, reply exactly: OUT_OF_SCOPE
 - Never guess or invent facts.`;
 
-// Strip anything that looks like a fence marker so visitor text cannot close the block early.
-const unfence = (text) => text.replace(/<<<|>>>/g, "");
+// Drop every angle bracket so visitor text can neither contain nor rebuild a fence marker.
+const unfence = (text) => text.replace(/[<>]/g, "");
 
 function visitorBlock(message, history) {
   const lines = [VISITOR_OPEN];
