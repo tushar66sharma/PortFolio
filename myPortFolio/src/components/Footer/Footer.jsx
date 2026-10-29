@@ -1,62 +1,46 @@
-import React from "react";
-import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram, FaYoutube } from "react-icons/fa";
-export const Footer = () => {
+import { DRAWING_NO, instagram, profiles, sections } from "../../site";
 
-  const handleScroll = (sectionId) => {
-    const section = document.getElementById(sectionId);
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+const SocialLink = ({ link }) => {
+  const { platform, url, Icon } = link;
   return (
-    <footer className="text-white py-8 px-[12vw] md:px-[7vw] lg:px-[20vw]">
-      <div className="container mx-auto text-center">
-        {/* Name / Logo */}
-        <h2 className="text-xl font-semibold text-blue-500">Tushar Sharma</h2>
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={platform}
+      className="grid size-10 place-items-center border border-line text-line transition-colors hover:border-accent hover:text-accent"
+    >
+      <Icon aria-hidden="true" className="size-4" />
+    </a>
+  );
+};
 
-        {/* Navigation Links - Responsive */}
-        <nav className="flex flex-wrap justify-center space-x-4 sm:space-x-6 mt-4">
-          {[
-            { name: "About", id: "about" },
-            { name: "Skills", id: "skills" },
-            { name: "Experience", id: "experience" },
-            { name: "Projects", id: "projects" },
-            { name: "Education", id: "education" },
-          ].map((item, index) => (
-            <button
-              key={index}
-              onClick={() => handleScroll(item.id)}
-              className="hover:text-purple-500 text-sm sm:text-base my-1"
-            >
-              {item.name}
-            </button>
-          ))}
-        </nav>
-
-        {/* Social Media Icons - Responsive */}
-        <div className="flex flex-wrap justify-center space-x-4 mt-6">
-          {[
-            { icon: <FaLinkedin />, link: "https://www.linkedin.com/in/tushar-sharma-599992256/" },
-            { icon: <FaInstagram />, link: "https://www.instagram.com/i_tushar_66?igsh=MXIxc3J6d3lyN3I4dA==" },
-            
-          ].map((item, index) => (
-            <a
-              key={index}
-              href={item.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xl hover:text-purple-500 transition-transform transform hover:scale-110"
-            >
-              {item.icon}
-            </a>
-          ))}
-        </div>
-
-        {/* Copyright Text */}
-        <p className="text-sm text-gray-400 mt-6">
-          © 2025 Tushar Sharma.  All rights reserved.
+// Two bands: brand + social icons, then section links + drawing note.
+export const Footer = () => (
+  <footer className="border-t-2 border-line px-4 py-6 sm:px-8">
+    <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <p className="font-display text-xl font-bold uppercase tracking-[0.06em]">
+          {DRAWING_NO} <span aria-hidden="true">⌖</span> Tushar Sharma
         </p>
+        <p className="mt-1 text-xs text-muted">© 2026 Tushar Sharma. All rights reserved.</p>
       </div>
-    </footer>
-  )
-}
+      <div className="flex gap-2">
+        {[...profiles, instagram].map((link) => (
+          <SocialLink key={link.platform} link={link} />
+        ))}
+      </div>
+    </div>
+
+    <div className="mt-5 flex flex-col gap-4 border-t border-dashed border-line pt-4 lg:flex-row lg:items-center lg:justify-between">
+      <nav aria-label="Footer" className="flex flex-wrap gap-x-5 gap-y-2">
+        {sections.map((s) => (
+          <a key={s.id} href={`#${s.id}`} className="text-xs uppercase tracking-[0.12em] no-underline hover:text-accent">
+            {s.label}
+          </a>
+        ))}
+      </nav>
+      <p className="bp-label">DO NOT SCALE DRAWING</p>
+    </div>
+  </footer>
+);

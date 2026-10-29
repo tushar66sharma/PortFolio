@@ -1,103 +1,58 @@
-import React from 'react'
-import { education } from '../../constants'
+import { education } from "../../constants";
+import { SectionHeader } from "../ui/SectionHeader";
 
-export const Education = () => {
-  return (
-    <section
-      id="education"
-      className="py-24 px-6 sm:px-12 md:px-[7vw] lg:px-[20vw] font-sans bg-gradient-to-b from-[#04070b] to-[#0d2254]"
-    >
-      {/* Section Title */}
-      <div className="text-center mb-16">
-        <h2 className="text-4xl font-bold text-white">EDUCATION</h2>
-        <div className="w-48 h-1 bg-[#1349bd] mx-auto mt-4" />
-        <p className="text-gray-400 mt-4 text-lg font-semibold">
-          My education has been a journey of learning and development. Here are the details of my academic background
-        </p>
+// Desktop: NO. | QUALIFICATION | PERIOD | GRADE. Phones: no. + period, qualification, then grade.
+const ROW = "grid grid-cols-[52px_minmax(0,1fr)] md:grid-cols-[52px_minmax(0,1fr)_170px_100px]";
+const SUB_CELL = "order-3 col-span-2 border-t border-dashed border-line md:order-none md:col-span-1 md:border-l md:border-t-0 md:border-solid";
+
+export const Education = () => (
+  <section id="education" className="border-t-2 border-line px-5 py-8 sm:px-8 sm:py-10">
+    <SectionHeader
+      tag="CERT. RECORD"
+      title="Education"
+      note="qualifications on file"
+      intro="My education has been a journey of learning and development. Here are the details of my academic background"
+    />
+
+    <div className="border-[1.5px] border-line">
+      <div className={`${ROW} hidden bg-panel text-[10.5px] uppercase tracking-[0.14em] text-muted md:grid`}>
+        <span className="px-3 py-2">NO.</span>
+        <span className="border-l border-line px-3 py-2">QUALIFICATION</span>
+        <span className="border-l border-line px-3 py-2">PERIOD</span>
+        <span className="border-l border-line px-3 py-2 text-right">GRADE</span>
       </div>
 
-      <div className="relative">
-        {/* Vertical center‐rail (only at 2xl+) */}
-        <div
-          className="
-            absolute hidden 2xl:block
-            left-1/2 transform -translate-x-1/2
-            w-1 bg-white h-full z-0
-          "
-        />
+      {education.map((edu, i) => (
+        <article key={edu.id} className={`${ROW} border-t border-line [&:nth-child(2)]:border-t-0 md:[&:nth-child(2)]:border-t`}>
+          <span className="order-1 px-3 py-3 tabular-nums text-muted md:order-none">{String(i + 1).padStart(2, "0")}</span>
 
-        {education.map((edu, idx) => (
-          <div
-            key={edu.id}
-            className={`
-              flex flex-col 2xl:flex-row items-center mb-16
-              ${idx % 2 === 0 ? '2xl:justify-start' : '2xl:justify-end'}
-            `}
-          >
-            {/* Timeline dot (only at 2xl+) */}
-            <div
-              className="
-                absolute hidden 2xl:flex
-                left-1/2 transform -translate-x-1/2
-                bg-gray-400 border-4 border-blue-500
-                w-12 h-12 2xl:w-16 2xl:h-16
-                rounded-full justify-center items-center
-                z-10
-              "
-            >
+          <div className={`${SUB_CELL} px-3 py-4 sm:px-4`}>
+            <div className="flex items-start gap-3">
               <img
                 src={edu.img}
                 alt={edu.school}
-                className="w-full h-full object-cover rounded-full"
+                loading="lazy"
+                decoding="async"
+                className="size-10 shrink-0 rounded-sm border border-line bg-white object-contain p-0.5"
               />
-            </div>
-
-            {/* Card (stacked until 2xl, then half‑width and offset) */}
-            <div
-              className={`
-                relative z-20
-                w-full sm:w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/3
-                mx-auto
-                2xl:ml-32 2xl:mr-32
-                p-4 sm:p-6 md:p-8
-                rounded-2xl
-                shadow-2xl border border-white
-                bg-gray-900 backdrop-blur-md
-                shadow-[0_0_20px_1px_rgba(130,69,236,0.3)]
-                transform transition-transform duration-300 hover:scale-105
-              `}
-            >
-              {/* Logo & Header */}
-              <div className="flex items-center space-x-4 sm:space-x-6">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-white rounded-md overflow-hidden">
-                  <img
-                    src={edu.img}
-                    alt={edu.school}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="flex flex-col justify-between">
-                  <div>
-                    <h3 className="text-xl sm:text-2xl font-semibold text-white">
-                      {edu.degree}
-                    </h3>
-                    <h4 className="text-md sm:text-sm text-gray-300">
-                      {edu.school}
-                    </h4>
-                  </div>
-                  <p className="text-sm text-gray-500 mt-2">{edu.date}</p>
-                </div>
+              <div className="min-w-0">
+                <h3 className="text-[15px] font-semibold leading-snug">{edu.degree}</h3>
+                <p className="break-words text-sm text-muted">{edu.school}</p>
               </div>
-
-              {/* Grade & Description */}
-              <p className="mt-4 text-gray-400 font-bold">
-                Grade: {edu.grade}
-              </p>
-              <p className="mt-2 text-gray-400">{edu.desc}</p>
             </div>
+            <p className="mt-3 max-w-[75ch] text-muted">{edu.desc}</p>
           </div>
-        ))}
-      </div>
-    </section>
-  )
-}
+
+          <span className="order-2 border-l border-line px-3 py-3 text-[13px] tabular-nums md:order-none">{edu.date}</span>
+
+          <p className="order-4 col-span-2 border-t border-dashed border-line px-3 py-2 md:order-none md:col-span-1 md:border-l md:border-t-0 md:border-solid md:py-3 md:text-right">
+            <span className="bp-label mr-2 md:hidden">GRADE</span>
+            <strong data-grade={edu.grade} className="font-semibold tabular-nums">
+              {edu.grade}
+            </strong>
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+);
