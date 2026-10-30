@@ -35,6 +35,10 @@ import csharpLogo from './assets/tech_logo/csharp.png';
 //Some  more as per m skills...........
 import awslogo from './assets/tech_logo/AWS.png';
 import  djangologo from'./assets/tech_logo/Django.png';
+import dockerLogo from './assets/tech_logo/docker.png';
+import kubernetesLogo from './assets/tech_logo/kubernetes_logo.svg';
+import gcpLogo from './assets/tech_logo/gcloud.png';
+import terraformLogo from './assets/tech_logo/terraform.png';
 
 // Experience Section Logo's
 import iiitdmjlogo from './assets/company_logo/iiitdmj_logo.png';
@@ -111,6 +115,10 @@ export const SkillsInfo = [
       { name: 'Netlify', logo: netlifyLogo },
       { name: 'Figma', logo: figmaLogo },
       { name: 'AWS', logo: awslogo },
+      { name: 'GCP', logo: gcpLogo },
+      { name: 'Docker', logo: dockerLogo },
+      { name: 'Kubernetes', logo: kubernetesLogo },
+      { name: 'Terraform', logo: terraformLogo },
 
     ],
   },
