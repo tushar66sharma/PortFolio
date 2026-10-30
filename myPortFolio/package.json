@@ -16,7 +16,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "node --test \"scripts/chat/*.test.mjs\"",
-    "knowledge": "node scripts/knowledge/build-knowledge.mjs"
+    "knowledge": "node scripts/knowledge/build-knowledge.mjs",
+    "chat:eval": "node scripts/chat/eval.mjs"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
