@@ -293,7 +293,7 @@ CHECKS.push({
 });
 
 // --- Chat widget ---
-const SAMPLE = "What is Tushar's current role?";
+const SAMPLE = "What is Tushar's latest role?";
 const panelRect = "(() => { const r = document.querySelector('#chat-panel')?.getBoundingClientRect(); return r && [r.left, r.top, r.width, r.height]; })()";
 const logText = "document.querySelector('.js-chat-log')?.innerText ?? ''";
 

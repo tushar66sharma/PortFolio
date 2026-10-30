@@ -6,7 +6,7 @@ export const VISITOR_OPEN = "<<<VISITOR_TEXT";
 export const VISITOR_CLOSE = "VISITOR_TEXT>>>";
 
 // Tells the scope check which section holds what, so it picks the right ones.
-const TOPIC_GUIDE = `- about: his name, title, current role and summary
+const TOPIC_GUIDE = `- about: his name, title, current or most recent role and summary
 - experience: jobs and internships, companies, dates and what he did there
 - projects: projects he built, the technologies used, code and demo links
 - skills: languages, frameworks, technologies and tools he knows

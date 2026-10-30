@@ -34,7 +34,7 @@ export const instagram = {
 
 // Suggested questions shown as pills when the chat opens.
 export const CHAT_SAMPLES = [
-  "What is Tushar's current role?",
+  "What is Tushar's latest role?",
   "What's his tech stack?",
   "Which projects has he built?",
   "What did he study?",

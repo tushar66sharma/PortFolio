@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { generateKnowledge, loadPortfolio } from "../knowledge/build-knowledge.mjs";
+import { buildSections, generateKnowledge, loadPortfolio } from "../knowledge/build-knowledge.mjs";
 import { LINKS, SECTIONS } from "../../api/_lib/knowledge.js";
 
 const { constants, site } = await loadPortfolio();
@@ -44,10 +44,23 @@ test("knowledge carries no image paths", () => {
 
 test("site exports the chat sample questions", () => {
   assert.deepEqual(site.CHAT_SAMPLES, [
-    "What is Tushar's current role?",
+    "What is Tushar's latest role?",
     "What's his tech stack?",
     "Which projects has he built?",
     "What did he study?",
     "How can I contact him?",
   ]);
+});
+
+test("the newest job is called current only while its date runs to Present", () => {
+  const withDate = (date) => ({
+    site,
+    constants: { ...constants, experiences: [{ ...constants.experiences[0], date }, ...constants.experiences.slice(1)] },
+  });
+  const ongoing = buildSections(withDate("June 2026 - Present")).about;
+  assert.match(ongoing, /^Current role: .+ \(June 2026 - Present\)$/m);
+
+  const ended = buildSections(withDate("June 2026 - August 2026")).about;
+  assert.match(ended, /^Most recent role: .+ \(June 2026 - August 2026\)$/m);
+  assert.doesNotMatch(ended, /Current role/);
 });
