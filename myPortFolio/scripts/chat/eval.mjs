@@ -33,7 +33,9 @@ for (const [i, c] of cases.entries()) {
   const ok = body.kind === c.expect;
   if (!ok) failed++;
   console.log(`${ok ? "PASS" : "FAIL"} ${c.q} → ${body.kind}${ok ? "" : ` (expected ${c.expect}): ${body.reply.slice(0, 120)}`}`);
-  if (i < cases.length - 1) await pause(2500); // stay under Groq's free-tier 30 requests/minute
+  // Each case makes up to three Groq calls; the free tier allows about 30 requests and
+  // 8,000 tokens a minute per model, so pace the cases well below that.
+  if (i < cases.length - 1) await pause(8000);
 }
 
 console.log(failed ? `\n${failed} of ${cases.length} cases failed` : `\nPASS ${cases.length} cases`);

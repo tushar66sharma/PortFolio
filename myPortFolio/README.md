@@ -38,6 +38,8 @@ Optional settings, also in Vercel's environment variables:
 
 Never give any of these names a `VITE_` prefix: Vite copies `VITE_` variables into the public JavaScript.
 
+Groq's free tier allows about 30 requests and 8,000 tokens a minute, and about 1,000 requests a day, for the main model. Each question uses two of those requests, and the limit is shared by every visitor, so roughly 3 to 5 questions a minute and 500 a day fit. When Groq asks for a short wait the bot retries once; otherwise visitors see the "busy" reply.
+
 ### 3. Run it locally
 
 Create `myPortFolio/.env.local` (it is git-ignored) containing:
@@ -62,5 +64,5 @@ The bot answers from `api/_lib/knowledge.js`, a file generated from `src/constan
 | Command | What it checks |
 |---|---|
 | `npm test` | Filters, rate limit, pipeline, function and knowledge (no key needed) |
-| `npm run chat:eval` | Sends about 40 real questions through Groq, including on-topic, off-topic, half-and-half and injection attempts, and checks each reply type (needs the key in `.env.local`; takes about 2 minutes) |
+| `npm run chat:eval` | Sends about 40 real questions through Groq, including on-topic, off-topic, half-and-half and injection attempts, and checks each reply type (needs the key in `.env.local`; takes about 6 minutes) |
 | `node scripts/audit/secret-check.mjs` | After a build, confirms the site contains no key or Groq endpoint |

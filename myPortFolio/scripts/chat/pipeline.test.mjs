@@ -205,6 +205,39 @@ test("Groq failures answer busy and never log the visitor text or key", async ()
   }
 });
 
+const rateLimited = (retryAfter) =>
+  new Response("{}", { status: 429, headers: retryAfter === undefined ? {} : { "retry-after": retryAfter } });
+
+test("a 429 with a short retry-after is retried once and then answered", async () => {
+  let limitedOnce = false;
+  const groq = fakeGroq({
+    respond: ({ type }) => {
+      if (type === "answer" && !limitedOnce) {
+        limitedOnce = true;
+        return rateLimited("0");
+      }
+      return completion({ guard: "0.01", scope: '{"verdict":"allow","topics":["projects"]}', answer: "He built several projects." }[type]);
+    },
+  });
+  const r = await run({ groq });
+  assert.deepEqual(r.body, { reply: "He built several projects.", kind: "answer" });
+  assert.deepEqual(r.calls.map((c) => c.type), ["guard", "scope", "answer", "answer"]);
+});
+
+test("a 429 that keeps coming, asks for a long wait or gives no wait answers busy", async () => {
+  const original = console.error;
+  console.error = () => {};
+  try {
+    for (const [retryAfter, calls] of [["0", 2], ["30", 1], [undefined, 1]]) {
+      const r = await run({ groq: fakeGroq({ respond: () => rateLimited(retryAfter) }) });
+      assert.deepEqual(r.body, { reply: MESSAGES.busy, kind: "busy" }, String(retryAfter));
+      assert.equal(r.calls.length, calls, String(retryAfter));
+    }
+  } finally {
+    console.error = original;
+  }
+});
+
 test("request bodies carry the pinned model settings and auth header", async () => {
   const r = await run();
   const [guard, scope, answer] = r.calls;
