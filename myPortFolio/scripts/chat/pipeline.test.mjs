@@ -151,6 +151,20 @@ test("allowed question: answer uses only the selected sections and fences the vi
   }
 });
 
+test("contact details are always sent, so coding profiles are found whatever topic is picked", async () => {
+  const r = await run({ groq: fakeGroq({ scope: '{"verdict":"allow","topics":["skills"]}' }) });
+  const answerText = r.calls[2].body.messages.map((m) => m.content).join("\n");
+  assert.ok(answerText.includes(SECTIONS.skills));
+  assert.ok(answerText.includes(SECTIONS.contact));
+});
+
+test("the scope prompt says what each topic covers", async () => {
+  const r = await run();
+  const system = r.calls[1].body.messages.find((m) => m.role === "system").content;
+  assert.match(system, /contact: [^\n]*LeetCode/);
+  assert.match(system, /skills: [^\n]*technologies/);
+});
+
 test("scope with no topics sends every section", async () => {
   const r = await run({ groq: fakeGroq({ scope: '{"verdict":"allow","topics":[]}' }) });
   const answerText = r.calls[2].body.messages.map((m) => m.content).join("\n");
