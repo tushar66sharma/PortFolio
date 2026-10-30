@@ -55,6 +55,12 @@ const inSource = (name, path, str) => ({
 });
 
 const CHECKS = [];
+// Expected counts, worked out here from the data rather than through the site's own helper.
+const expected = {
+  roles: experiences.length,
+  projects: projects.length,
+  skills: SkillsInfo.reduce((n, category) => n + category.skills.length, 0),
+};
 
 // --- Task 1: content from constants.js ---
 SkillsInfo.forEach((cat) => {
@@ -117,7 +123,7 @@ CHECKS.push(
     test: () => {
       if (typeof mod.revLetter !== "function") return "drawing helpers not exported from entry-server";
       const c = mod.getCounts();
-      const ok = mod.revLetter(0, 4) === "D" && mod.revLetter(3, 4) === "A" && mod.detailLetter(6) === "G" && c.roles === 4 && c.projects === 7 && c.skills === 36;
+      const ok = mod.revLetter(0, 4) === "D" && mod.revLetter(3, 4) === "A" && mod.detailLetter(6) === "G" && c.roles === expected.roles && c.projects === expected.projects && c.skills === expected.skills;
       return ok || `got revLetter(0,4)=${mod.revLetter(0, 4)} revLetter(3,4)=${mod.revLetter(3, 4)} detailLetter(6)=${mod.detailLetter(6)} counts=${JSON.stringify(c)}`;
     },
   }
@@ -142,7 +148,7 @@ const titleBlock = () => squash(decode((html.match(/aria-label="Title block"[\s\
 CHECKS.push(
   inText("hero: eyebrow", "GENERAL ARRANGEMENT"),
   inText("hero: first role word typed on first paint", "Full-Stack Developer"),
-  inText("hero: dimension line", "4 ROLES · 7 PROJECTS · 36 SKILLS"),
+  inText("hero: dimension line", `${expected.roles} ROLES · ${expected.projects} PROJECTS · ${expected.skills} SKILLS`),
   inText("hero: photo label", "FRONT ELEVATION"),
   inText("hero: CV button", "Download CV"),
   inHtml("hero: photo alt", 'alt="Tushar Sharma"'),
