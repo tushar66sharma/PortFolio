@@ -53,3 +53,19 @@ test("vercel.json deploys the function with zero-config settings", () => {
   assert.equal(config.outputDirectory, "dist");
   assert.equal(config.functions["api/chat.js"].maxDuration, 30);
 });
+
+test("the public host from x-forwarded-host is used for the Origin check", async () => {
+  process.env.GROQ_API_KEY = "gsk_test_secret";
+  try {
+    const req = new Request("https://internal.test/api/chat", {
+      method: "POST",
+      headers: { "content-type": "application/json", origin: "https://site.test", "x-forwarded-host": "site.test" },
+      body: JSON.stringify({ message: "hi" }),
+    });
+    const res = await POST(req);
+    assert.equal(res.status, 200);
+    assert.equal((await res.json()).kind, "greeting");
+  } finally {
+    delete process.env.GROQ_API_KEY;
+  }
+});

@@ -47,7 +47,8 @@ export async function POST(request) {
     rawBody: await readBody(request),
     ip: clientIp(request.headers),
     origin: request.headers.get("origin") ?? undefined,
-    host: new URL(request.url).host,
+    // Behind Vercel's proxy the public domain arrives in x-forwarded-host.
+    host: request.headers.get("x-forwarded-host") ?? new URL(request.url).host,
     env: process.env,
     limiter,
   });
