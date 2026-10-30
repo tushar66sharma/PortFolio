@@ -209,7 +209,7 @@ export const SkillsInfo = [
       school: "IIITDM Jabalpur",
       date: "August 2022 - Present",
       grade: "8.4 CPI",
-      desc: "I am pursuing my Bachelor's degree in Computer Science and Engineering (B.Tech.) from Indian Institute of Information Technology Design and Manufacturing Jabalpur. Throughout my studies, I was immersed in a variety of subjects that deepened my understanding of computing and technology. From exploring Data Structures and Algorithms to diving into Web Development and Database Management Systems, I gained practical insights into the world of software development. My time at IITDMJ allowed me to work on projects that applied theoretical concepts to real-world problems.",
+      desc: "I graduated with a Bachelor's degree in Computer Science and Engineering (B.Tech.) from the Indian Institute of Information Technology, Design and Manufacturing Jabalpur in June 2026. Throughout my academic journey, I explored various areas of computing and technology, including Data Structures and Algorithms, Web Development, and Database Management Systems. I gained practical experience by applying theoretical concepts to real-world challenges through academic and personal projects, strengthening my problem-solving and software development skills.",
       degree: "B.Tech - Computer Science and Engineering",
     },
     {
