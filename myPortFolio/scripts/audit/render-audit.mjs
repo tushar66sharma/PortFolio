@@ -218,6 +218,16 @@ CHECKS.push(
   ])
 );
 
+// --- Chat widget (closed on first render) ---
+CHECKS.push(
+  inHtml("chat: launcher button", 'class="js-chat-launcher'),
+  inHtml("chat: launcher label", 'aria-label="Open chat"'),
+  inHtml("chat: launcher collapsed", 'aria-expanded="false"'),
+  inHtml("chat: launcher controls panel", 'aria-controls="chat-panel"'),
+  inHtml("chat: unread dot", "js-chat-dot"),
+  { name: "chat: panel closed on load", test: () => !page.includes('id="chat-panel"') || "panel rendered while closed" }
+);
+
 // --- run ---
 const failures = [];
 for (const c of CHECKS) {

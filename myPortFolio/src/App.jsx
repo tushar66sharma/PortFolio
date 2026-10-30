@@ -7,6 +7,7 @@ import { Work } from "./components/Work/Work";
 import { Education } from "./components/Education/Education";
 import { Contact } from "./components/Contact/Contact";
 import { Footer } from "./components/Footer/Footer";
+import { ChatWidget } from "./components/Chat/ChatWidget";
 import "./index.css";
 
 const ZONES = ["A", "B", "C", "D", "E", "F"];
@@ -35,6 +36,7 @@ function App() {
           <Footer />
         </div>
       </main>
+      <ChatWidget />
     </>
   );
 }
