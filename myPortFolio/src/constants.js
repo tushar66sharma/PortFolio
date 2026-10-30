@@ -35,6 +35,10 @@ import csharpLogo from './assets/tech_logo/csharp.png';
 //Some  more as per m skills...........
 import awslogo from './assets/tech_logo/AWS.png';
 import  djangologo from'./assets/tech_logo/Django.png';
+import dockerLogo from './assets/tech_logo/docker.png';
+import kubernetesLogo from './assets/tech_logo/kubernetes_logo.svg';
+import gcpLogo from './assets/tech_logo/gcloud.png';
+import terraformLogo from './assets/tech_logo/terraform.png';
 
 // Experience Section Logo's
 import iiitdmjlogo from './assets/company_logo/iiitdmj_logo.png';
@@ -53,6 +57,8 @@ import pathfinderlogo from './assets/work_logo/pathfinder_logo.png';
 import rentconnectlogo from './assets/work_logo/RentConnect.png';
 import vendorlogo from './assets/work_logo/Vendor_Driver.png';
 import agri_chatbot_logo from './assets/work_logo/agri_chatbot_logo.png';
+import mcpgatewaylogo from './assets/work_logo/MCP_Gateway_on_Kubnetes.png';
+import workflowvisualizerlogo from './assets/work_logo/AI_Workflow_Visualizer.png';
 
 export const SkillsInfo = [
   {
@@ -109,6 +115,10 @@ export const SkillsInfo = [
       { name: 'Netlify', logo: netlifyLogo },
       { name: 'Figma', logo: figmaLogo },
       { name: 'AWS', logo: awslogo },
+      { name: 'GCP', logo: gcpLogo },
+      { name: 'Docker', logo: dockerLogo },
+      { name: 'Kubernetes', logo: kubernetesLogo },
+      { name: 'Terraform', logo: terraformLogo },
 
     ],
   },
@@ -120,7 +130,7 @@ export const SkillsInfo = [
       img: TechJapanlogo,
       role: "Software Engineer",
       company: "Talendy Holdings (Tech Japan Labs)",
-      date: "June 2026 - Present",
+      date: "June 2026 - August 2026",
       desc: "Building scalable backend services and AI-powered applications using Python, FastAPI, TypeScript, and Google Cloud. Contributing to cloud infrastructure, CI/CD automation, API development, monitoring, and production-ready systems with a focus on reliability and performance.",
       skills: [
         "JavaScript",
@@ -205,9 +215,9 @@ export const SkillsInfo = [
       id: 0,
       img: iiitdmj1logo,
       school: "IIITDM Jabalpur",
-      date: "August 2022 - Present",
+      date: "August 2022 - June 2026",
       grade: "8.4 CPI",
-      desc: "I am pursuing my Bachelor's degree in Computer Science and Engineering (B.Tech.) from Indian Institute of Information Technology Design and Manufacturing Jabalpur. Throughout my studies, I was immersed in a variety of subjects that deepened my understanding of computing and technology. From exploring Data Structures and Algorithms to diving into Web Development and Database Management Systems, I gained practical insights into the world of software development. My time at IITDMJ allowed me to work on projects that applied theoretical concepts to real-world problems.",
+      desc: "I graduated with a Bachelor's degree in Computer Science and Engineering (B.Tech.) from the Indian Institute of Information Technology, Design and Manufacturing Jabalpur in June 2026. Throughout my academic journey, I explored various areas of computing and technology, including Data Structures and Algorithms, Web Development, and Database Management Systems. I gained practical experience by applying theoretical concepts to real-world challenges through academic and personal projects, strengthening my problem-solving and software development skills.",
       degree: "B.Tech - Computer Science and Engineering",
     },
     {
@@ -300,6 +310,26 @@ export const SkillsInfo = [
       tags: ["JavaScript","React.js","OpenRouter ","Express.js","Browser Web Speech API"," Vercel (frontend)"," Render (backend)"],
       github: "https://github.com/tushar66sharma/agri-ai-weather-chatbot",
       webapp: "https://agri-ai-weather-chatbot.vercel.app/",
+    },
+    {
+      id: 7,
+      title: "MCP Gateway on Kubernetes",
+      description:
+        "A centralized MCP gateway that lets teams access multiple MCP servers through a single endpoint, with centralized authentication, credential management, and auditing. It exposes 15 tools across multiple MCP servers, namespaced to prevent tool-name conflicts, and supports personal API keys, invite links, admin/member roles, and immediate key revocation. Upstream credentials are encrypted with AES-GCM and hidden from team members, with SSRF protection, server health checks, failure isolation, and user-attributed audit logs for every tool call and rejected credential. A dashboard AI chat agent built on Groq, with optional OpenRouter, lets users work with the MCP tools under usage limits and guardrails. It ships with hardened Kubernetes configurations, default-deny NetworkPolicies, Pod Security restrictions, and a single Helm chart for local and production deployment. Built with TypeScript, Node.js 24, Express 5, the MCP TypeScript SDK, Zod, PostgreSQL 17 with Drizzle ORM, React 19, Vite, Tailwind CSS, TanStack Query and Nginx, secured with argon2id, and tested with Vitest, Playwright and kubeconform on k3d/k3s.",
+      image: mcpgatewaylogo,
+      tags: ["Kubernetes", "Helm", "Traefik", "TypeScript", "Node.js", "Express", "PostgreSQL", "Drizzle ORM", "React JS", "Tailwind CSS", "Groq", "OpenRouter"],
+      github: "https://github.com/tushar66sharma/MCP-Gateway-on-Kubernetes",
+      webapp: "https://drive.google.com/file/d/1Fkaoby_sGbq76WcrcYnlhynwMSHgeKMH/view?usp=drive_link",
+    },
+    {
+      id: 8,
+      title: "AI Workflow Visualizer",
+      description:
+        "A visual workflow builder that enables users to create, connect, and orchestrate complex workflows through an interactive drag-and-drop canvas built with React Flow. Long-running workflows execute reliably in the background with Trigger.dev, built-in Google Gemini AI nodes add AI-powered processing, and Transloadit handles image cropping and manipulation. Users sign in through Clerk for secure authentication and session management, and every run shows real-time workflow history, execution status, and processing time. Built with Next.js (App Router), React, Tailwind CSS, Lucide Icons, and PostgreSQL (Neon) with Prisma ORM.",
+      image: workflowvisualizerlogo,
+      tags: ["Next.js", "React JS", "React Flow", "Tailwind CSS", "Trigger.dev", "Google Gemini", "Transloadit", "Clerk", "PostgreSQL", "Prisma"],
+      github: "https://github.com/tushar66sharma/Py_Galaxy.ai",
+      webapp: "https://py-galaxy-ai.vercel.app/",
     },
 
   ];  

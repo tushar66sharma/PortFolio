@@ -27,14 +27,15 @@ export async function loadPortfolio() {
   }
 }
 
-function buildSections({ constants, site }) {
+export function buildSections({ constants, site }) {
   const { SkillsInfo, experiences, projects, education } = constants;
-  const current = experiences[0];
+  const latest = experiences[0];
+  const ongoing = /present/i.test(latest.date);
 
   const about = [
     "Name: Tushar Sharma",
     "Title: Software Engineer",
-    `Current role: ${current.role} at ${current.company} (${current.date})`,
+    `${ongoing ? "Current role" : "Most recent role"}: ${latest.role} at ${latest.company} (${latest.date})`,
     `About: ${site.ABOUT_TEXT}`,
   ].join("\n");
 

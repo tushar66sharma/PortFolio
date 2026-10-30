@@ -40,7 +40,7 @@ const useTypewriter = (words) => {
 const TitleBlock = () => {
   const cells = [
     { label: "TITLE", value: "SOFTWARE ENGINEER", wide: true, big: true },
-    { label: "CURRENT ASSIGNMENT", value: experiences[0].company, wide: true },
+    { label: /present/i.test(experiences[0].date) ? "CURRENT ASSIGNMENT" : "LATEST ASSIGNMENT", value: experiences[0].company, wide: true },
     { label: "DRAWN BY", value: "T. SHARMA" },
     { label: "DWG NO.", value: DRAWING_NO },
     { label: "CERT.", value: `B.Tech CSE · ${education[0].grade}` },
