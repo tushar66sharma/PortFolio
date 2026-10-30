@@ -122,7 +122,7 @@ export const SkillsInfo = [
       img: TechJapanlogo,
       role: "Software Engineer",
       company: "Talendy Holdings (Tech Japan Labs)",
-      date: "June 2026 - Present",
+      date: "June 2026 - August 2026",
       desc: "Building scalable backend services and AI-powered applications using Python, FastAPI, TypeScript, and Google Cloud. Contributing to cloud infrastructure, CI/CD automation, API development, monitoring, and production-ready systems with a focus on reliability and performance.",
       skills: [
         "JavaScript",
@@ -207,7 +207,7 @@ export const SkillsInfo = [
       id: 0,
       img: iiitdmj1logo,
       school: "IIITDM Jabalpur",
-      date: "August 2022 - Present",
+      date: "August 2022 - June 2026",
       grade: "8.4 CPI",
       desc: "I graduated with a Bachelor's degree in Computer Science and Engineering (B.Tech.) from the Indian Institute of Information Technology, Design and Manufacturing Jabalpur in June 2026. Throughout my academic journey, I explored various areas of computing and technology, including Data Structures and Algorithms, Web Development, and Database Management Systems. I gained practical experience by applying theoretical concepts to real-world challenges through academic and personal projects, strengthening my problem-solving and software development skills.",
       degree: "B.Tech - Computer Science and Engineering",
