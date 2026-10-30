@@ -64,5 +64,5 @@ The bot answers from `api/_lib/knowledge.js`, a file generated from `src/constan
 | Command | What it checks |
 |---|---|
 | `npm test` | Filters, rate limit, pipeline, function and knowledge (no key needed) |
-| `npm run chat:eval` | Sends about 40 real questions through Groq, including on-topic, off-topic, half-and-half and injection attempts, and checks each reply type (needs the key in `.env.local`; takes about 6 minutes) |
+| `npm run chat:eval` | Sends about 45 real questions through Groq, including on-topic, off-topic, half-and-half and injection attempts, and checks each reply type (needs the key in `.env.local`; takes about 6 minutes) |
 | `node scripts/audit/secret-check.mjs` | After a build, confirms the site contains no key or Groq endpoint |

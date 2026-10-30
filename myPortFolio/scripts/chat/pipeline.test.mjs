@@ -165,6 +165,23 @@ test("the scope prompt says what each topic covers", async () => {
   assert.match(system, /skills: [^\n]*technologies/);
 });
 
+test("the scope prompt names his projects and companies, so questions without his name are recognised", async () => {
+  const r = await run();
+  const system = r.calls[1].body.messages.find((m) => m.role === "system").content;
+  for (const name of ["FootBall Analysis System", "Path Finding Visualizer", "Talendy Holdings", "Akatsuki AI Technologies"]) {
+    assert.ok(system.includes(name), name);
+  }
+});
+
+test("both prompts refuse requests to write anything, even about or addressed to Tushar", async () => {
+  const r = await run();
+  for (const call of r.calls.slice(1)) {
+    const system = call.body.messages.find((m) => m.role === "system").content;
+    assert.match(system, /draft/i, call.type);
+    assert.match(system, /addressed to/i, call.type);
+  }
+});
+
 test("scope with no topics sends every section", async () => {
   const r = await run({ groq: fakeGroq({ scope: '{"verdict":"allow","topics":[]}' }) });
   const answerText = r.calls[2].body.messages.map((m) => m.content).join("\n");
