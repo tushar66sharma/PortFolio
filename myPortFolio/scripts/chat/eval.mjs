@@ -19,17 +19,27 @@ const limiter = createRateLimiter({ perMinute: 1000, perDay: 100000 });
 const pause = (ms) => new Promise((r) => setTimeout(r, ms));
 let failed = 0;
 
+const ask = async (c) =>
+  (
+    await handleChat({
+      method: "POST",
+      contentType: "application/json",
+      rawBody: JSON.stringify({ message: c.q, history: c.history ?? [] }),
+      ip: "eval",
+      origin: undefined,
+      host: "localhost",
+      env,
+      limiter,
+    })
+  ).body;
+
 for (const [i, c] of cases.entries()) {
-  const { body } = await handleChat({
-    method: "POST",
-    contentType: "application/json",
-    rawBody: JSON.stringify({ message: c.q, history: c.history ?? [] }),
-    ip: "eval",
-    origin: undefined,
-    host: "localhost",
-    env,
-    limiter,
-  });
+  let body = await ask(c);
+  // "busy" means Groq's per-minute limit, not a wrong answer: wait for it to reset and ask again once.
+  if (body.kind === "busy") {
+    await pause(30000);
+    body = await ask(c);
+  }
   const ok = body.kind === c.expect;
   if (!ok) failed++;
   console.log(`${ok ? "PASS" : "FAIL"} ${c.q} → ${body.kind}${ok ? "" : ` (expected ${c.expect}): ${body.reply.slice(0, 120)}`}`);

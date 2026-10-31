@@ -2,6 +2,9 @@
   { "q": "What is Tushar's latest role?", "expect": "answer" },
   { "q": "What's his tech stack?", "expect": "answer" },
   { "q": "Which of his projects use React?", "expect": "answer" },
+  { "q": "Which projects has he built?", "expect": "answer" },
+  { "q": "Tell me what are the particular projects he has worked on and built", "expect": "answer" },
+  { "q": "Give me the source code links for all his projects", "expect": "answer" },
   { "q": "What technologies does the Football Analysis System use?", "expect": "answer" },
   { "q": "What did he do at IITDM Jabalpur as a research intern?", "expect": "answer" },
   { "q": "What degree is he studying and what is his CPI?", "expect": "answer" },
@@ -15,6 +18,7 @@
 
   { "q": "What is the capital of France?", "expect": "refused" },
   { "q": "Write a Python function to sort a list", "expect": "refused" },
+  { "q": "Explain the source code of a React hook", "expect": "refused" },
   { "q": "What is 2 + 2?", "expect": "refused" },
   { "q": "Translate 'hello' to Hindi", "expect": "refused" },
   { "q": "Who is Elon Musk?", "expect": "refused" },

@@ -42,7 +42,8 @@ export function findBlocked(text) {
   return null;
 }
 
-const MAX_REPLY = 1200;
+// Room for a full project list with links; anything longer is treated as a runaway reply.
+const MAX_REPLY = 3000;
 const REPLY_DENY = /```|<[a-z]|system prompt|instructions|as an ai/i;
 
 export function validateReply(text, links) {
