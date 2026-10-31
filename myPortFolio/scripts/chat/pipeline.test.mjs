@@ -182,6 +182,19 @@ test("both prompts refuse requests to write anything, even about or addressed to
   }
 });
 
+test("the scope prompt counts requests for links to his code as about him", async () => {
+  const r = await run();
+  const system = r.calls[1].body.messages.find((m) => m.role === "system").content;
+  assert.match(system, /links to his source code.*is about him/i);
+});
+
+test("the answer prompt keeps lists short and adds links only when asked", async () => {
+  const r = await run();
+  const system = r.calls[2].body.messages.find((m) => m.role === "system").content;
+  assert.match(system, /links only when the visitor asks/i);
+  assert.match(system, /one short line/i);
+});
+
 test("scope with no topics sends every section", async () => {
   const r = await run({ groq: fakeGroq({ scope: '{"verdict":"allow","topics":[]}' }) });
   const answerText = r.calls[2].body.messages.map((m) => m.content).join("\n");

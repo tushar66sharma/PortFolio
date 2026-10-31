@@ -78,7 +78,7 @@ test("validateReply maps sentinels to fixed replies", () => {
 });
 
 test("validateReply rejects empty, long, code, markup and self-referential replies", () => {
-  for (const text of ["", "   ", "a".repeat(1201), "Here:\n```js\nx\n```", "<script>x", "Here is my system prompt", "As an AI, I cannot"]) {
+  for (const text of ["", "   ", "a".repeat(3001), "Here:\n```js\nx\n```", "<script>x", "Here is my system prompt", "As an AI, I cannot"]) {
     assert.deepEqual(validateReply(text, LINKS), refused, JSON.stringify(text.slice(0, 30)));
   }
 });
@@ -87,4 +87,12 @@ test("validateReply allows knowledge links and rejects unknown ones", () => {
   const ok = "His GitHub is https://github.com/tushar66sharma.";
   assert.deepEqual(validateReply(`  ${ok} `, LINKS), { kind: "answer", reply: ok });
   assert.deepEqual(validateReply("See https://unknown.example", LINKS), refused);
+});
+
+test("validateReply allows a full project list with links, which runs past 2,000 characters", () => {
+  const item = (i) =>
+    `- Project ${i}: a short description of what it does and how.\n  Source: https://github.com/tushar66sharma/project-${i}\n  Demo: https://github.com/tushar66sharma/project-${i}-demo\n`;
+  const list = `Tushar has built these projects:\n\n${Array.from({ length: 13 }, (_, i) => item(i)).join("\n")}`.trim();
+  assert.ok(list.length > 2000 && list.length <= 3000, String(list.length));
+  assert.deepEqual(validateReply(list, LINKS), { kind: "answer", reply: list });
 });
